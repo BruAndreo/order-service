@@ -1,12 +1,20 @@
 package usecases
 
-import "github.com/google/uuid"
+import (
+	"github.com/bruandreo/order-service/internal/domain"
+	"github.com/google/uuid"
+)
 
-func NewProductPizzeria() uuid.UUID {
-	// recebe a pizzaria
-	// recebe o produto
-	// valida produto
-	// cadastra
+type ProductBasic struct {
+	Name        string
+	Description string
+	Price       float64
+}
 
-	return uuid.New()
+func NewProductPizzeria(pizzeria domain.Pizzeria, product ProductBasic) uuid.UUID {
+	newProduct := domain.NewProduct(product.Name, product.Description, product.Price)
+
+	// chama repo para cadastrar
+
+	return newProduct.ID
 }
