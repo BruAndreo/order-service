@@ -1,9 +1,16 @@
 package usecases
 
 import (
+	"errors"
+
 	"github.com/bruandreo/order-service/internal/domain"
+	"github.com/bruandreo/order-service/internal/repositories"
 	"github.com/google/uuid"
 )
+
+type NewProduct struct {
+	Repository repositories.ProductRepository
+}
 
 type ProductBasic struct {
 	Name        string
@@ -11,10 +18,11 @@ type ProductBasic struct {
 	Price       float64
 }
 
-func NewProductPizzeria(pizzeria domain.Pizzeria, product ProductBasic) uuid.UUID {
+func (np *NewProduct) NewProductPizzeria(pizzeria domain.Pizzeria, product ProductBasic) (uuid.UUID, error) {
 	newProduct := domain.NewProduct(product.Name, product.Description, product.Price)
 
-	// chama repo para cadastrar
-
-	return newProduct.ID
+	if success := np.Repository.Create(pizzeria.ID, newProduct); success {
+		return newProduct.ID, nil
+	}
+	return uuid.UUID{}, errors.New("fail to create new product")
 }

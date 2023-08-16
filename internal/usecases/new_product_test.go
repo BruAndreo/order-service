@@ -9,15 +9,48 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestInsertNewProduct(t *testing.T) {
-	pizzeria := domain.Pizzeria{ID: uuid.New(), Name: "Pizza Test"}
-	product := usecases.ProductBasic{
-		Name:        "test",
-		Description: "test",
-		Price:       45.67,
-	}
+type ProductRepositoryMock struct {
+	CreateReturn bool
+}
 
-	newProductID := usecases.NewProductPizzeria(pizzeria, product)
+func (rm *ProductRepositoryMock) Create(pizzeriaID uuid.UUID, product domain.Product) bool {
+	return rm.CreateReturn
+}
 
-	assert.NotEmpty(t, newProductID)
+func TestNewProduct(t *testing.T) {
+
+	t.Run("Should create new product and return ID", func(t *testing.T) {
+		pizzeria := domain.Pizzeria{ID: uuid.New(), Name: "Pizza Test"}
+		product := usecases.ProductBasic{
+			Name:        "test",
+			Description: "test",
+			Price:       45.67,
+		}
+
+		repoMock := ProductRepositoryMock{CreateReturn: true}
+		useCase := usecases.NewProduct{Repository: &repoMock}
+
+		newProductID, err := useCase.NewProductPizzeria(pizzeria, product)
+
+		assert.Nil(t, err)
+		assert.NotEmpty(t, newProductID)
+	})
+
+	t.Run("Shouldn't create new product and return Error", func(t *testing.T) {
+		pizzeria := domain.Pizzeria{ID: uuid.New(), Name: "Pizza Test"}
+		product := usecases.ProductBasic{
+			Name:        "test",
+			Description: "test",
+			Price:       45.67,
+		}
+
+		repoMock := ProductRepositoryMock{CreateReturn: false}
+		useCase := usecases.NewProduct{Repository: &repoMock}
+
+		newProductID, err := useCase.NewProductPizzeria(pizzeria, product)
+
+		assert.NotNil(t, err)
+		assert.Error(t, err, "fail to insert new product")
+		assert.Empty(t, newProductID)
+	})
 }
