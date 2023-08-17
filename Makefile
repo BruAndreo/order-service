@@ -1,8 +1,4 @@
 
-## SETUP
-setup:
-	cp .env.example .env
-
 ## TEST
 test:
 	go test ./... -v
@@ -10,7 +6,20 @@ test:
 test.cover:
 	go test ./... --cover
 
+## INFRA
+up.database:
+	docker compose up postgres -d
 
 ## RUN APP
 run.api:
-	go run cmd/main.go
+	go run cmd/*.go api
+
+## MIGRATION
+run.migrations:
+	go run cmd/*.go migrations
+
+## SETUP
+create.env:
+	cp .env.example .env
+
+setup: create.env up.database run.migrations

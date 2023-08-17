@@ -1,0 +1,11 @@
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE products(
+    id UUID PRIMARY KEY NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    description VARCHAR(128) NOT NULL,
+    price DECIMAL(6,2) NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP
+);
