@@ -20,8 +20,8 @@ func (rm *ProductRepositoryMock) Create(pizzeriaID uuid.UUID, product domain.Pro
 func TestNewProduct(t *testing.T) {
 
 	t.Run("Should create new product and return ID", func(t *testing.T) {
-		pizzeria := domain.Pizzeria{ID: uuid.New(), Name: "Pizza Test"}
-		product := usecases.ProductBasic{
+		product := usecases.NewProductInput{
+			PizzeriaID:  uuid.New(),
 			Name:        "test",
 			Description: "test",
 			Price:       45.67,
@@ -30,15 +30,15 @@ func TestNewProduct(t *testing.T) {
 		repoMock := ProductRepositoryMock{CreateReturn: true}
 		useCase := usecases.NewProduct{Repository: &repoMock}
 
-		newProductID, err := useCase.NewProductPizzeria(pizzeria, product)
+		newProductID, err := useCase.NewProductPizzeria(product)
 
 		assert.Nil(t, err)
 		assert.NotEmpty(t, newProductID)
 	})
 
 	t.Run("Shouldn't create new product and return Error", func(t *testing.T) {
-		pizzeria := domain.Pizzeria{ID: uuid.New(), Name: "Pizza Test"}
-		product := usecases.ProductBasic{
+		product := usecases.NewProductInput{
+			PizzeriaID:  uuid.New(),
 			Name:        "test",
 			Description: "test",
 			Price:       45.67,
@@ -47,7 +47,7 @@ func TestNewProduct(t *testing.T) {
 		repoMock := ProductRepositoryMock{CreateReturn: false}
 		useCase := usecases.NewProduct{Repository: &repoMock}
 
-		newProductID, err := useCase.NewProductPizzeria(pizzeria, product)
+		newProductID, err := useCase.NewProductPizzeria(product)
 
 		assert.NotNil(t, err)
 		assert.Error(t, err, "fail to insert new product")

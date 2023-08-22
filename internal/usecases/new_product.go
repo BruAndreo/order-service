@@ -12,13 +12,15 @@ type NewProduct struct {
 	Repository repositories.ProductRepository
 }
 
-type ProductBasic struct {
-	Name        string
-	Description string
-	Price       float64
+type NewProductInput struct {
+	PizzeriaID  uuid.UUID `json:"pizzeriaId"`
+	Name        string    `json:"name"`
+	Description string    `json:"description"`
+	Price       float64   `json:"price"`
 }
 
-func (np *NewProduct) NewProductPizzeria(pizzeria domain.Pizzeria, product ProductBasic) (uuid.UUID, error) {
+func (np *NewProduct) NewProductPizzeria(product NewProductInput) (uuid.UUID, error) {
+	pizzeria := domain.Pizzeria{ID: product.PizzeriaID}
 	newProduct := domain.NewProduct(product.Name, product.Description, product.Price)
 
 	if success := np.Repository.Create(pizzeria.ID, newProduct); success {

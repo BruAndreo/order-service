@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"github.com/bruandreo/order-service/internal/db"
+	"github.com/bruandreo/order-service/internal/handlers"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 )
@@ -15,4 +17,9 @@ func Initialize(app *fiber.App) {
 			"status": "healthy",
 		})
 	})
+
+	productHandler := handlers.ProductsHandler{
+		Repository: &db.ProductRepositoryDatabase{},
+	}
+	app.Post("/products", productHandler.CreateProduct)
 }
