@@ -5,7 +5,6 @@ import (
 	"github.com/bruandreo/order-service/internal/db"
 	"github.com/bruandreo/order-service/internal/routes"
 	"github.com/gofiber/fiber/v2"
-	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/cobra"
 )
 
@@ -26,14 +25,11 @@ func ExecuteApi() {
 		AppName: "Order Service API",
 	})
 
-	dependencies := map[string]interface{}{
-		"ProductRepository": &db.ProductRepositoryDatabase{},
+	dependencies := routes.DependenciesInjector{
+		ProductRepository: &db.ProductRepositoryDatabase{},
 	}
-	var result interface{}
 
-	mapstructure.Decode(dependencies, &result)
-
-	routes.Initialize(app)
+	routes.Initialize(app, dependencies)
 
 	app.Listen(":" + config.AppPort)
 }
