@@ -5,6 +5,7 @@ import (
 	"github.com/bruandreo/order-service/internal/db"
 	"github.com/bruandreo/order-service/internal/routes"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/spf13/cobra"
 )
 
@@ -24,6 +25,10 @@ func ExecuteApi() {
 	app := fiber.New(fiber.Config{
 		AppName: "Order Service API",
 	})
+
+	app.Use(logger.New(logger.Config{
+		Format: "[${time}] ${method} ${path} ${status} ${latency}",
+	}))
 
 	dependencies := routes.DependenciesInjector{
 		ProductRepository: &db.ProductRepositoryDatabase{},
