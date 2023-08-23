@@ -21,9 +21,9 @@ type NewProductInput struct {
 
 func (np *NewProduct) NewProductPizzeria(product NewProductInput) (uuid.UUID, error) {
 	pizzeria := domain.Pizzeria{ID: product.PizzeriaID}
-	newProduct := domain.NewProduct(product.Name, product.Description, product.Price)
+	newProduct := domain.NewProduct(pizzeria.ID, product.Name, product.Description, product.Price)
 
-	if success := np.Repository.Create(pizzeria.ID, newProduct); success {
+	if success := np.Repository.Create(newProduct); success {
 		return newProduct.ID, nil
 	}
 	return uuid.UUID{}, errors.New("fail to create new product")

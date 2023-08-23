@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS products;
 
 CREATE TABLE products(
     id UUID PRIMARY KEY NOT NULL,
+    pizzeria_id UUID NOT NULL,
     name VARCHAR(64) NOT NULL,
     description VARCHAR(128) NOT NULL,
     price DECIMAL(6,2) NOT NULL,

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/bruandreo/order-service/database"
 	"github.com/bruandreo/order-service/internal/config"
 	"github.com/bruandreo/order-service/internal/db"
 	"github.com/bruandreo/order-service/internal/routes"
@@ -30,8 +31,11 @@ func ExecuteApi() {
 		Format: "[${time}] ${method} ${path} ${status} ${latency}",
 	}))
 
+	dbConn := database.Connection(config)
+
 	dependencies := routes.DependenciesInjector{
-		ProductRepository: &db.ProductRepositoryDatabase{},
+		ProductRepository: &db.ProductRepositoryDatabase{DB: dbConn},
+		DB:                dbConn,
 	}
 
 	routes.Initialize(app, dependencies)

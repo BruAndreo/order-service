@@ -4,13 +4,19 @@ import (
 	"log"
 
 	"github.com/bruandreo/order-service/internal/domain"
-	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
-type ProductRepositoryDatabase struct{}
+type ProductRepositoryDatabase struct {
+	DB *gorm.DB
+}
 
-func (prd *ProductRepositoryDatabase) Create(pizzeriaID uuid.UUID, product domain.Product) bool {
-	log.Print(pizzeriaID, product)
-	// insert db
+func (prd *ProductRepositoryDatabase) Create(product domain.Product) bool {
+	result := prd.DB.Unscoped().Create(&product)
+	if result.Error != nil {
+		log.Print("ERROR", result.Error.Error())
+		return false
+	}
+
 	return true
 }

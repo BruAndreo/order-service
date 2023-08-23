@@ -13,7 +13,7 @@ type ProductRepositoryMock struct {
 	CreateReturn bool
 }
 
-func (rm *ProductRepositoryMock) Create(pizzeriaID uuid.UUID, product domain.Product) bool {
+func (rm *ProductRepositoryMock) Create(product domain.Product) bool {
 	return rm.CreateReturn
 }
 
