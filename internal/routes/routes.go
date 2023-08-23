@@ -15,5 +15,5 @@ func Initialize(app *fiber.App, dependencies DependenciesInjector) {
 	productHandler := handlers.ProductsHandler{
 		Repository: dependencies.ProductRepository,
 	}
-	app.Post("/products/:id", productHandler.CreateProduct)
+	app.Post("/pizzeria/:id/products", productHandler.CreateProduct)
 }
