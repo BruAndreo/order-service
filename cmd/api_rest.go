@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/bruandreo/order-service/database"
 	"github.com/bruandreo/order-service/internal/config"
-	"github.com/bruandreo/order-service/internal/db"
+	"github.com/bruandreo/order-service/internal/repositories/db"
 	"github.com/bruandreo/order-service/internal/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
